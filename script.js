@@ -54,7 +54,7 @@ function drawChart(options) {
             .attr({
                 zIndex: 10
             })
-            .add(group);
+            .add();
         });
     }
 
@@ -109,7 +109,7 @@ NetworkChart.prototype.draw = function () {
 }
 
 var netChart = new NetworkChart({
-    data: ['Software Developer', 'Java Developer', 'Data Scientist', , 'Team lead', 'Senior Developer',
+    data: ['Software Developer', 'Java Developer', 'Data Scientist', 'Team lead', 'Senior Developer',
         'Software Engineer', 'Database Engineer', 'System Admin', 'Team lead', 'Senior Developer']
 });
 
