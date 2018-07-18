@@ -54,6 +54,9 @@ function drawChart(options) {
             .attr({
                 zIndex: 10
             })
+            .css({
+                color:'#8babc7'
+            })
             .add();
         });
     }
@@ -75,14 +78,50 @@ function drawChart(options) {
 
         points.push({
             circle: circle,
-            path: path,
             group: group,
-            name: element
+            name: element,
+            tick:'',
+            selected: false
         });
+    }
+
+    var attachEvents = function() {        
+        points.forEach(point => {
+            point.circle.on('click', function(){
+                if (!point.tick) {
+                    var circleBBox = point.circle.getBBox();
+                    var x = circleBBox.x + circleBBox.width/2.5;
+                    var y = circleBBox.y + circleBBox.height/1.5;
+                    var shortTickLength = circleBBox.width/4 - 6;
+    
+                    var tick = renderer.path(['M', x, y, 'l', -shortTickLength, -shortTickLength, 'M', x, y, 'l', shortTickLength*2, -shortTickLength*2])
+                    .attr({
+                        stroke: 'white',
+                        'stroke-width': 2,
+                        zIndex: 14
+                    })
+                    .add().hide();                    
+
+                    point.tick = tick;
+                }
+                point.selected = !point.selected;
+
+                if(point.selected){
+                    point.tick.show();
+                    point.circle.attr('fill','#5ba2dc');
+                }
+                else{                    
+                point.tick.hide();
+                point.circle.attr('fill','#9cc1e1');
+                }
+
+            });
+        }); 
     }
 
     renderPoints();
     renderLabels();
+    attachEvents();
 
 }
 
@@ -91,26 +130,23 @@ function drawChart(options) {
 
 function NetworkChart(settings) {
     this.data = settings.data;
-}
-
-NetworkChart.prototype.draw = function () {
-    var self = this;
-    Highcharts.chart('container', {
-        chart: {
-            backgroundColor: 'white',
-            events: {
-                load: function () {
-                    drawChart.call(this, self.data);
+    this.init = function(){
+        var self = this;
+        Highcharts.chart('container', {
+            chart: {
+                events: {
+                    load: function () {
+                        drawChart.call(this, self.data);
+                    }
                 }
-            }
-        },
-        title: false
-    });
-}
+            },
+            title: false
+        });
+    }
 
+    this.init();
+}
 var netChart = new NetworkChart({
     data: ['Software Developer', 'Java Developer', 'Data Scientist', 'Team lead', 'Senior Developer',
         'Software Engineer', 'Database Engineer', 'System Admin', 'Team lead', 'Senior Developer']
 });
-
-netChart.draw();
