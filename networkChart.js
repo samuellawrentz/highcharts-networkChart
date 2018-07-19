@@ -12,17 +12,18 @@ window.customCharts = (function (H) {
     else {
         return {
             NetworkChart : function(chartOptions) {
-                this.data = chartOptions.data;
+                this.idSelector = chartOptions.selector || '';
+                this.data = chartOptions.data || [];
     
                 //Array to store selected points
                 this.selectedPoints = [];
     
-                this.themeColor = chartOptions.themeColor;
+                this.themeColor = chartOptions.themeColor || '#5ba2dc';
     
                 //Create highchart canvas with minimal options
                 this.init = function () {
                     var self = this;
-                    H.chart('container', {
+                    H.chart(self.idSelector, {
                         chart: {
                             events: {
                                 load: function () {
@@ -121,7 +122,7 @@ window.customCharts = (function (H) {
     
                         //Render bubble for each data point    
                         data.forEach(element => {
-                            var length = networkChart.utils.getRandomArbitrary(100, 250);
+                            var length = networkChart.utils.getRandomArbitrary(100, chart.chartHeight/2 - 50);
                             var radius = networkChart.utils.getRandomArbitrary(20, 40);
                             renderBubbles(length, radius, element);
                         });
