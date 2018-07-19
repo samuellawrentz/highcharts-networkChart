@@ -1,17 +1,28 @@
 # highcharts-networkChart
-A fully custom network chart rendered using Highcharts SVG Renderer
+A custom network chart rendered using Highcharts SVG Renderer
 
 Dependency: Highcharts v5.0.0 or above
 
-This generates a fully custom network chart based on the options passed. You can instantate the chart by passing the data to `NetworkChart`.
+This generates a custom network chart based on the options passed. You can instantate the chart by passing the data to `NetworkChart`. It also has click event by default to select points on the chart.
 ```
 var chart = new NetworkChart({
-data:['Your data goes here']
+data:['Your', 'data', 'goes', 'here']
 });
 ```
 
-More options to come!
+## TBD
 
+*1. Align dataLabels*
+
+*2. Create Tooltip*
+
+*3. Allow theming options*
+
+*4. Make the chart fully customisable*
+
+
+### Reach out  
 Please suggest any improvements and customisation at samuellawrentz@gmail.com
 
+### Demo  
 View the demo on https://samuellawrentz.github.io/highcharts-networkChart/
