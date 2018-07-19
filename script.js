@@ -51,6 +51,12 @@ function NetworkChart(chartOptions) {
         shadeColor: function (color, percent) {
             var f = parseInt(color.slice(1), 16), t = percent < 0 ? 0 : 255, p = percent < 0 ? percent * -1 : percent, R = f >> 16, G = f >> 8 & 0x00FF, B = f & 0x0000FF;
             return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
+        },
+
+        isBetween: function(angle){
+            var angle90 = 90 * (Math.PI / 180);
+            var angle270= 270 * (Math.PI / 180);
+            return angle >= angle90 && angle <= angle270;
         }
 
     }
@@ -129,6 +135,12 @@ function NetworkChart(chartOptions) {
                     .attr({zIndex: 10})
                     .css({color: networkChart.themeColor})
                     .add();
+
+                    if(networkChart.utils.isBetween(point.angle)){
+                        var labelBBox = label.getBBox();
+                        labelX = circleBBox.x - labelBBox.width - 5;
+                        label.attr({x: labelX});
+                    }
             });
         }
 
@@ -148,16 +160,17 @@ function NetworkChart(chartOptions) {
                 .attr(lineStyle)
                 .add(group);
 
-            angle += angleDifference;
-
             //Populate the points array with point details.
             points.push({
                 circle: circle,
                 group: group,
                 name: element,
                 tick: '',
+                angle: angle,
                 selected: false
             });
+
+            angle += angleDifference;
         }
 
         //Attach event handlers for the bubble
