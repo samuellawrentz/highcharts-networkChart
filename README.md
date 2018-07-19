@@ -6,9 +6,9 @@ Dependency: Highcharts v5.0.0 or above
 This generates a custom network chart based on the options passed. You can instantate the chart by passing the data to `NetworkChart`. It also has click event by default to select points on the chart.
 ```
 var chart = new customChart.NetworkChart({
-data:['Your', 'data', 'goes', 'here'],
-selector: 'container_id',
-themeColor: 'only_hex_color'
+    data:['Your', 'data', 'goes', 'here'],
+    selector: 'container_id',
+    themeColor: 'only_hex_color'
 });
 ```
 The radius and distance of bubbles from the center is random and can be overridden according to the value provided to them.
