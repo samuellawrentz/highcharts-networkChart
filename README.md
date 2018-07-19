@@ -27,3 +27,5 @@ Please suggest any improvements and customisation at samuellawrentz@gmail.com
 
 ### Demo  
 View the demo on https://samuellawrentz.github.io/highcharts-networkChart/
+
+Keep refreshing the site to see the bubbles changing radius and distance from the center.
