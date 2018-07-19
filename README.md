@@ -9,6 +9,7 @@ var chart = new NetworkChart({
 data:['Your', 'data', 'goes', 'here']
 });
 ```
+The radius and distance of bubbles from the center is random and can be overridden according to the value provided to them.
 
 ## TBD
 
