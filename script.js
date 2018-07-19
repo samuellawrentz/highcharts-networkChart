@@ -5,11 +5,13 @@
 //Author: Samuel Lawrentz
 //18-07-2918
 
-function NetworkChart(userOptions) {
-    this.data = userOptions.data;
+function NetworkChart(chartOptions) {
+    this.data = chartOptions.data;
 
     //Array to store selected points
     this.selectedPoints = [];
+
+    this.themeColor = chartOptions.themeColor;   
 
     //Create highchart canvas with minimal options
     this.init = function () {
@@ -21,7 +23,8 @@ function NetworkChart(userOptions) {
                         //Private method to draw the chart
                         drawChart.call(this, self);
                     }
-                }
+                },
+                backgroundColor: self.backgroundColor
             },
             title: false
         });
@@ -40,9 +43,19 @@ function NetworkChart(userOptions) {
         //Util method to get random values between two values
         getRandomArbitrary: function (min, max) {
             return Math.random() * (max - min) + min;
+        },
+
+        //Lighten or darken given color
+        //Percent parameter range from -1.0 to 1.0
+        //https://stackoverflow.com/a/13542669/8252164
+        shadeColor: function (color, percent) {
+            var f = parseInt(color.slice(1), 16), t = percent < 0 ? 0 : 255, p = percent < 0 ? percent * -1 : percent, R = f >> 16, G = f >> 8 & 0x00FF, B = f & 0x0000FF;
+            return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
         }
 
     }
+
+    this.backgroundColor = this.utils.shadeColor(this.themeColor, 0.93);
 
     //Private method to draw the network chart.
     //Not accessible by instances of 'NetworkChart'
@@ -63,16 +76,18 @@ function NetworkChart(userOptions) {
         var angleDifference = (360 / data.length) * (Math.PI / 180);
         var angle = 90 * (Math.PI / 180);
 
+        var bubbleColor = networkChart.utils.shadeColor(networkChart.themeColor, 0.4);
+
         //Styling
         var bubbleStyle = {
-            fill: '#9cc1e1',
-            stroke: 'white',
+            fill: bubbleColor,
+            stroke: networkChart.backgroundColor,
             'stroke-width': 3,
             zIndex: 3
         };
 
         var lineStyle = {
-            stroke: '#d1e4f1',
+            stroke: networkChart.utils.shadeColor(networkChart.themeColor, 0.7),
             'stroke-width': 20,
             zIndex: 0
         }
@@ -85,7 +100,7 @@ function NetworkChart(userOptions) {
 
             //Render the center bubble
             var circle = renderer.circle(centerX, centerY, 50).attr({
-                fill: '#5ba2dc',
+                fill: networkChart.themeColor,
                 stroke: 'white',
                 'stroke-width': 2,
                 zIndex: 3
@@ -111,16 +126,11 @@ function NetworkChart(userOptions) {
                 var labelY = circleBBox.y + circleBBox.height / 2;
 
                 var label = renderer.text(text, labelX, labelY)
-                    .attr({
-                        zIndex: 10
-                    })
-                    .css({
-                        color: '#8babc7'
-                    })
+                    .attr({zIndex: 10})
+                    .css({color: networkChart.themeColor})
                     .add();
             });
         }
-
 
         //Render bubbles for the provided radius and distance from center
         var renderBubbles = function (length, radius, element) {
@@ -130,7 +140,7 @@ function NetworkChart(userOptions) {
 
             //Draw the circle
             var circle = renderer.circle(x, y, radius).attr(bubbleStyle)
-                .css({cursor:'pointer'})
+                .css({ cursor: 'pointer' })
                 .add(group);
 
             //Draw the connecting line
@@ -175,12 +185,12 @@ function NetworkChart(userOptions) {
 
                     if (point.selected) {
                         point.tick.show();
-                        point.circle.attr('fill', '#5ba2dc');
+                        point.circle.attr('fill', networkChart.themeColor);
                         networkChart.selectedPoints.push(point.name);
                     }
                     else {
                         point.tick.hide();
-                        point.circle.attr('fill', '#9cc1e1');
+                        point.circle.attr('fill', bubbleColor);
                         networkChart.utils.remove(networkChart.selectedPoints, point.name);
                     }
 
@@ -192,7 +202,6 @@ function NetworkChart(userOptions) {
         renderPoints();
         renderLabels();
         attachEvents();
-
     }
 
     //Initialte rendereing
@@ -201,6 +210,7 @@ function NetworkChart(userOptions) {
 
 //Creating a new chart consuming the NetworkChart
 var netChart = new NetworkChart({
-    data: ['Software Developer', 'Java Developer', 'Data Scientist', 'Team lead', 'Senior Developer',
-        'Software Engineer', 'Database Engineer', 'System Admin', 'Team lead', 'Senior Developer']
+    data: ['Software Developer', 'Java Developer', 'Senior Developer', 'Web Developer', 'Highcharts Developer',
+        'Software Engineer', 'Database Engineer', 'System Admin', 'Team lead', 'Senior Developer'],
+    themeColor: '#5ba2dc'
 });
