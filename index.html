@@ -10,6 +10,11 @@
 var netChart = new customCharts.NetworkChart({
     selector:'container',
     data: ['Software Developer', 'Java Developer', 'Senior Developer', 'Web Developer', 'Highcharts Developer',
-        'Software Engineer', 'Database Engineer', 'System Admin', 'Team lead', 'Senior Developer']
+        'Software Engineer', 'Database Engineer', 'System Admin', 'Team lead', 'Senior Developer'],
+        events:{
+            select: function(data){
+                alert(data);
+            }
+        }
 });
 </script>
