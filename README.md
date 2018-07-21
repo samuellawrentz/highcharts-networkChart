@@ -1,7 +1,7 @@
 # highcharts-networkChart
 A custom network chart rendered using Highcharts SVG Renderer
 
-Dependency: Highcharts v5.0.0 or above
+Dependency: Highcharts
 
 This generates a custom network chart based on the options passed. You can instantate the chart by passing the data to `NetworkChart`. It also has click event by default to select points on the chart.
 ```
@@ -34,4 +34,4 @@ Implementation Demo: https://codepen.io/samuellawrentz/pen/OwbNqP
 
 Keep refreshing the site to see the bubbles changing radius and distance from the center ;)
 
-PS: This chart was initially created for learning about Highcharts SVG Renderer and also because I was unable to sleep one night ;)
+PS: This chart was initially created for learning about Highcharts SVG Renderer and also because I was unable to sleep one night :) ;)
