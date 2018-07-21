@@ -33,3 +33,5 @@ View the demo on https://samuellawrentz.github.io/highcharts-networkChart/
 Implementation Demo: https://codepen.io/samuellawrentz/pen/OwbNqP
 
 Keep refreshing the site to see the bubbles changing radius and distance from the center ;)
+
+PS: This chart was initially created for learning about Highcharts SVG Renderer and also because I was unable to sleep one night ;)
