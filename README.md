@@ -6,7 +6,10 @@ Dependency: Highcharts
 This generates a custom network chart based on the options passed. You can instantate the chart by passing the data to `NetworkChart`. It also has click event by default to select points on the chart.
 ```
 var chart = new customChart.NetworkChart({
-    data:['Your', 'data', 'goes', 'here'],
+    series:{
+      name:'Series_name',
+      data: ['Your', 'data', 'goes', 'here']
+    },
     selector: 'container_id',
     themeColor: 'only_hex_color',
     events:{
