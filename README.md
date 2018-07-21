@@ -8,7 +8,10 @@ This generates a custom network chart based on the options passed. You can insta
 var chart = new customChart.NetworkChart({
     data:['Your', 'data', 'goes', 'here'],
     selector: 'container_id',
-    themeColor: 'only_hex_color'
+    themeColor: 'only_hex_color',
+    events:{
+       select: callBackFn
+      }
 });
 ```
 The radius and distance of bubbles from the center is random and can be overridden according to the value provided to them.
