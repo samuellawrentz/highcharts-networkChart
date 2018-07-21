@@ -2,19 +2,25 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 <div id="container" style="width: 90vw; height: 90vh; margin: 0 auto"></div>
-<div style="width: 100% ; text-align: center"><a href="https://github.com/samuellawrentz/highcharts-networkChart">CODE</a></div>
+<div style="width: 100% ; text-align: center">
+    <a href="https://github.com/samuellawrentz/highcharts-networkChart">CODE</a>
+</div>
 <script src="networkChart.js"></script>
 
 <script>
     //Creating a new chart consuming the NetworkChart
-var netChart = new customCharts.NetworkChart({
-    selector:'container',
-    data: ['Software Developer', 'Java Developer', 'Senior Developer', 'Web Developer', 'Highcharts Developer',
-        'Software Engineer', 'Database Engineer', 'System Admin', 'Team lead', 'Senior Developer'],
-        events:{
-            select: function(data){
+    var netChart = new customCharts.NetworkChart({
+        selector: 'container',
+        series: {
+            name: 'Developer',
+            data: ['Software Developer', 'Java Developer', 'Senior Developer', 'Web Developer', 'Highcharts Developer',
+                'Software Engineer', 'Database Engineer', 'System Admin', 'Team lead', 'Senior Developer']
+
+        },
+        events: {
+            select: function (data) {
                 alert(data);
             }
         }
-});
+    });
 </script>

@@ -1,6 +1,6 @@
 //Module Network Chart
 //Creates a network chart for the provided data along with click events using Highcharts SVG Renderer.
-//Dependency: Highcharts v5.0.0 or above
+//Dependency: Highcharts
 //Author: Samuel Lawrentz
 //18-07-2918
 
@@ -12,8 +12,9 @@ window.customCharts = (function (H) {
     else {
         return {
             NetworkChart: function (chartOptions) {
-                this.idSelector = chartOptions.selector || '';
-                this.data = chartOptions.data || [];
+                chartOptions = chartOptions || {}
+
+                this.series = chartOptions.series || {};
 
                 //Array to store selected points
                 this.selectedPoints = [];
@@ -23,18 +24,19 @@ window.customCharts = (function (H) {
                 //Create highchart canvas with minimal options
                 this.init = function () {
                     var self = this;
-                    H.chart(self.idSelector, {
-                        chart: {
-                            events: {
-                                load: function () {
-                                    //Private method to draw the chart
-                                    drawChart.call(this, self);
-                                }
+                    if (chartOptions.selector)
+                        H.chart(chartOptions.selector, {
+                            chart: {
+                                events: {
+                                    load: function () {
+                                        //Private method to draw the chart
+                                        drawChart.call(this, self);
+                                    }
+                                },
+                                backgroundColor: self.backgroundColor
                             },
-                            backgroundColor: self.backgroundColor
-                        },
-                        title: false
-                    });
+                            title: false
+                        });
                 }
 
                 //Helper methods
@@ -60,10 +62,11 @@ window.customCharts = (function (H) {
                         return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
                     },
 
-                    isBetween: function (angle) {
-                        var angle90 = 90 * (Math.PI / 180);
-                        var angle270 = 270 * (Math.PI / 180);
-                        return angle >= angle90 && angle <= angle270;
+                    //Determine wether a angle is between two angles
+                    isBetween: function (angle, start, end) {
+                        var startRad = start * (Math.PI / 180);
+                        var endRad = end * (Math.PI / 180);
+                        return angle >= startRad && angle <= endRad;
                     }
 
                 }
@@ -73,7 +76,7 @@ window.customCharts = (function (H) {
                 //Private method to draw the network chart.
                 //Not accessible by instances of 'NetworkChart'
                 var drawChart = function (networkChart) {
-                    var data = networkChart.data;
+                    var data = networkChart.series.data;
 
                     //Highcharts chart canvas
                     var chart = this;
@@ -109,15 +112,27 @@ window.customCharts = (function (H) {
                     var points = [];
 
                     //Function to render points
-                    var renderPoints = function () {
+                    var renderSeries = function () {
 
-                        //Render the center bubble
+                        //Render the center bubble with series name
                         var circle = renderer.circle(centerX, centerY, 50).attr({
                             fill: networkChart.themeColor,
                             stroke: 'white',
                             'stroke-width': 2,
                             zIndex: 3
-                        })
+                        }).add();
+
+                        var text = networkChart.series.name;
+                        var circleBBox = circle.getBBox();
+                        var labelX = circleBBox.x + circleBBox.width + 5;
+                        var labelY = circleBBox.y + circleBBox.height / 2.5;
+
+                        var label = renderer.text(text, labelX, labelY)
+                            .attr({ zIndex: 10 })
+                            .css({ 
+                                color: networkChart.utils.shadeColor(networkChart.themeColor, -0.15),
+                                fontSize:13
+                             })
                             .add();
 
                         //Render bubble for each data point    
@@ -132,7 +147,6 @@ window.customCharts = (function (H) {
                     var renderLabels = function () {
                         points.forEach(point => {
                             var circle = point.circle;
-                            var group = point.group;
                             var text = point.name;
                             var circleBBox = circle.getBBox();
                             var labelX = circleBBox.x + circleBBox.width + 10;
@@ -143,7 +157,7 @@ window.customCharts = (function (H) {
                                 .css({ color: networkChart.themeColor })
                                 .add();
 
-                            if (networkChart.utils.isBetween(point.angle)) {
+                            if (networkChart.utils.isBetween(point.angle, 90, 270)) {
                                 var labelBBox = label.getBBox();
                                 labelX = circleBBox.x - labelBBox.width - 5;
                                 label.attr({ x: labelX });
@@ -159,7 +173,7 @@ window.customCharts = (function (H) {
 
                         //Draw the circle
                         var circle = renderer.circle(x, y, radius).attr(bubbleStyle)
-                            .css({ cursor: 'pointer' })
+                            .css({ cursor: chartOptions.events && 'pointer' })
                             .add(group);
 
                         //Draw the connecting line
@@ -207,7 +221,7 @@ window.customCharts = (function (H) {
                                     point.tick.show();
                                     point.circle.attr('fill', networkChart.themeColor);
                                     networkChart.selectedPoints.push(point.name);
-                                    
+
                                     if (chartOptions.events && chartOptions.events.select)
                                         chartOptions.events.select.call(networkChart, point.name);
                                 }
@@ -222,9 +236,9 @@ window.customCharts = (function (H) {
                     }
 
                     //Fire up all the required events
-                    renderPoints();
+                    renderSeries();
                     renderLabels();
-                    attachEvents();
+                    chartOptions.events && attachEvents();
                 }
 
                 //Initialte rendereing
