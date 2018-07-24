@@ -19,15 +19,20 @@ var chart = new customChart.NetworkChart({
 ```
 The radius and distance of bubbles from the center is random and can be overridden according to the value provided to them.
 
+## API
+
+You can directly select a point using the `select()` method. Pass in the value of the point to be selected.
+```
+chart.select('data');
+
+```
 ## TBD
 
 *1. Create Tooltip*
 
 *2. Make the chart fully customisable*
 
-*3. Provide event callbacks*
-
-*4. Provide update method*
+*3. Provide update method*
 
 
 ### Reach out  
