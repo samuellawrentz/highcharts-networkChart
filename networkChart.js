@@ -252,6 +252,11 @@ window.customCharts = (function (H) {
             match && H.fireEvent(match.circle.element, 'click');
             return match;
         }
+
+        NetworkChart.prototype.update = function(data){
+            this.series.data = data;
+            this.init();
+        }
         return {
             NetworkChart: NetworkChart
         }
