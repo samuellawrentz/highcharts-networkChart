@@ -26,6 +26,12 @@ You can directly select a point using the `select()` method. Pass in the value o
 chart.select('data');
 
 ```
+
+You can update the chart by passing new data to the `update()` method. Pass in a new array to the method to redraw the chart.
+```
+chart.update(['this', 'is', 'updated', 'data', 'yay'])
+
+```
 ## TBD
 
 *1. Create Tooltip*
