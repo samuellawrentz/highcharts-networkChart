@@ -38,7 +38,6 @@ chart.update(['this', 'is', 'updated', 'data', 'yay'])
 
 *2. Make the chart fully customisable*
 
-*3. Provide update method*
 
 
 ### Reach out  
