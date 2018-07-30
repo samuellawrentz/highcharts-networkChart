@@ -39,10 +39,6 @@ chart.update(['this', 'is', 'updated', 'data', 'yay'])
 *2. Make the chart fully customisable*
 
 
-
-### Reach out  
-Please suggest any improvements and customisation at samuellawrentz@gmail.com
-
 ### Demo  
 View the demo on https://samuellawrentz.github.io/highcharts-networkChart/
 
