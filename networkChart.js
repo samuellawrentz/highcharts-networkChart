@@ -138,7 +138,7 @@ window.customCharts = (function (H) {
                         .add();
 
                     //Render bubble for each data point    
-                    data.forEach(element => {
+                    data.forEach(function(element){
                         var length = networkChart.utils.getRandomArbitrary(100, chart.chartHeight / 2 - 50);
                         var radius = networkChart.utils.getRandomArbitrary(20, 40);
                         renderBubbles(length, radius, element);
@@ -147,7 +147,7 @@ window.customCharts = (function (H) {
 
                 //Renders dataLabels
                 var renderLabels = function () {
-                    points.forEach(point => {
+                    points.forEach(function(point){
                         var circle = point.circle;
                         var text = point.name;
                         var circleBBox = circle.getBBox();
@@ -174,14 +174,14 @@ window.customCharts = (function (H) {
                     var y = centerY + length * Math.sin(angle);
 
                     //Draw the circle
-                    var circle = renderer.circle(x, y, radius).attr(bubbleStyle)
+                    var circle = renderer.circle(centerX, centerY, radius).attr(bubbleStyle)
                         .css({ cursor: chartOptions.events && 'pointer' })
                         .add(group);
-
+                    circle.animate({x:x, y:y});
                     //Draw the connecting line
-                    var path = renderer.path(['M', centerX, centerY, 'L', x, y])
+                    var path = renderer.path(['M', centerX, centerY, 'L', centerX, centerY])
                         .attr(lineStyle)
-                        .add(group);
+                        .add(group).animate({d:['M', centerX, centerY, 'L', x, y]});
 
                     //Populate the points array with point details.
                     points.push({
@@ -198,7 +198,10 @@ window.customCharts = (function (H) {
 
                 //Attach event handlers for the bubble
                 var attachEvents = function () {
-                    points.forEach(point => {
+                    points.forEach(function(point){
+                        point.circle.on('mouseover', function(){
+                            console.log('entered');
+                        })
                         point.circle.on('click', function () {
                             if (!point.tick) {
                                 var circleBBox = point.circle.getBBox();
@@ -239,7 +242,9 @@ window.customCharts = (function (H) {
 
                 //Fire up all the required events
                 renderSeries();
-                renderLabels();
+                setTimeout(function(){
+                    renderLabels();
+                }, 500); 
                 chartOptions.events && attachEvents();
             }
 
@@ -248,7 +253,7 @@ window.customCharts = (function (H) {
         }
 
         NetworkChart.prototype.select = function(pointName){
-            let match = this.points.find(point => point.name === pointName);
+            let match = this.points.find(function(point){ return point.name === pointName});
             match && H.fireEvent(match.circle.element, 'click');
             return match;
         }
