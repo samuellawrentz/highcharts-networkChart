@@ -1,5 +1,5 @@
 # highcharts-networkChart
-A custom network chart rendered using Highcharts SVG Renderer
+A custom network chart rendered using Highcharts SVG Renderer. A network chart connects a node with its similar nodes, the distance between the center and the node shows their similarity. The greater the distance of a node from center, lesser its similarity with the center node.
 
 Dependency: Highcharts
 
